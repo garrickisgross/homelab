@@ -9,7 +9,7 @@ const SERVICES = [
   },
   {
     name: "Jellyseerr",
-    url: "https://requests.gross-home-lab.com",
+    url: "https://jellyseerr.gross-home-lab.com",
     group: "Media",
     description: "Manage and approve media requests for Jellyfin.",
     icon: "📥"
@@ -44,21 +44,21 @@ const SERVICES = [
   },
   {
     name: "LazyLibrarian",
-    url: "https://booksarr.gross-home-lab.com",
+    url: "https://lazy-librarian.gross-home-lab.com",
     group: "Books",
     description: "Automation for ebooks and audiobooks.",
     icon: "📚"
   },
   {
     name: "Kavita",
-    url: "https://books.gross-home-lab.com",
+    url: "https://kavita.gross-home-lab.com",
     group: "Books",
     description: "Reader for ebooks, manga, and comics.",
     icon: "📖"
   },
   {
     name: "Audiobookshelf",
-    url: "https://audio.gross-home-lab.com",
+    url: "https://audiobookshelf.gross-home-lab.com",
     group: "Books",
     description: "Stream audiobooks with rich progress tracking.",
     icon: "🎧"
