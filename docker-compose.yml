@@ -175,7 +175,7 @@ services:
     ports:
       - "8191:8191"
     networks:
-      - media_net
+      - vpn_net
     restart: unless-stopped
      
     
