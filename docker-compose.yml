@@ -20,7 +20,7 @@ services:
       - SERVER_COUNTRIES=${SERVER_COUNTRIES}
       - TZ=${TZ}
       - FIREWALL_OUTBOUND_SUBNETS=${FIREWALL_OUTBOUND_SUBNETS}
-      - FIREWALL_INPUT_PORTS=${QBITTORRENT_WEB_PORT},${SONARR_PORT},${RADARR_PORT},${PROWLARR_PORT},${OPENWEBUI_PORT},${FLARESOLVERR_PORT},${JELLYFIN_PORT},${BAZARR_PORT},${JELLYSEERR_PORT}
+      - FIREWALL_INPUT_PORTS=${QBITTORRENT_WEB_PORT},${SONARR_PORT},${RADARR_PORT},${PROWLARR_PORT},${OPENWEBUI_PORT},${FLARESOLVERR_PORT},${JELLYFIN_PORT},${BAZARR_PORT},${JELLYSEERR_PORT},${HOMEPAGE_PORT}
     volumes:
       - ./config/gluetun:/gluetun
     # Ports here are for services that SHARE this network namespace
@@ -35,6 +35,7 @@ services:
       - "${JELLYFIN_PORT}:${JELLYFIN_PORT}"
       - "${BAZARR_PORT}:${BAZARR_PORT}"
       - "${JELLYSEERR_PORT}:${JELLYSEERR_PORT}"
+      - "${HOMEPAGE_PORT}:${HOMEPAGE_PORT}"
     networks:
       - vpn_net
 
@@ -228,9 +229,34 @@ services:
       - PGID=1000
     volumes:
       - ./config/jellyseerr:/app/config
+      - /home/homelab/downloads/movie:/movies
+      - /home/homelab/downloads/tv:/tvshows
+      - /home/homelab/downloads/torrent:/torrents
     restart: unless-stopped
 
-     
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - CLOUDFLARED_TUNNEL_TOKEN=${CLOUDFLARED_TUNNEL_TOKEN}
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TUNNEL_TOKEN}
+    volumes:
+      - ./config/cloudflared:/etc/cloudflared
+  
+  homepage:
+    image: ghcr.io/ajnart/homepage:latest
+    container_name: homepage
+    network_mode: "service:vpn"
+    restart: unless-stopped
+    volumes:
+      - ./config/homepage:/app/data
+    environment:
+      - TZ=${TZ}
+      # Note: NOT forced through VPN by default; easy to change later.
+      # If you want it through VPN, replace `networks` with:
+      # network_mode: "service:vpn"
     
 networks:
   vpn_net:
