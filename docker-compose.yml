@@ -165,7 +165,19 @@ services:
       # Note: NOT forced through VPN by default; easy to change later.
       # If you want it through VPN, replace `networks` with:
       # network_mode: "service:vpn"
-        
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=info
+      - TZ=America/Chicago
+    ports:
+      - "8191:8191"
+    networks:
+      - media_net
+    restart: unless-stopped
+     
     
 networks:
   vpn_net:
