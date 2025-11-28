@@ -81,8 +81,7 @@ services:
       - TZ=${TZ}
       - WEBUI_PORT=${QBITTORRENT_WEB_PORT}
     volumes:
-      - ./config/qbittorrent:/config
-      - ./downloads/torrents:/downloads
+      - /home/homelab/downloads/torrents:/torrents
 
   # =========================
   # SONARR (THROUGH VPN)
@@ -101,8 +100,9 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
+      - /home/homelab/downloads/tv:/tvshows          # Sonarr sees TV shows here
       - ./config/sonarr:/config
-      - ./downloads:/downloads        # Sonarr sees completed media
+      - /home/homelab/downloads/torrents:/torrents      # Sonarr sees completed media
     # No ports here; exposed via vpn service
 
   # =========================
@@ -122,8 +122,9 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
+      - /home/homelab/downloads/movie:/movies
+      - /home/homelab/downloads/torrents:/torrents
       - ./config/radarr:/config
-      - ./downloads:/downloads
     # No ports here; exposed via vpn service
 
   # =========================
@@ -201,9 +202,10 @@ services:
       - PGID=1000
       - TZ=America/Chicago
     volumes:
+      - /home/homelab/downloads/movie:/movies
+      - /home/homelab/downloads/tv:/tv
       - /srv/config/jellyfin:/config
-      - /srv/media/tv:/data/tv
-      - /srv/media/movies:/data/movies
+      
     restart: unless-stopped
 
      
