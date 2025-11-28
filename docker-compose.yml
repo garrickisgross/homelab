@@ -277,25 +277,6 @@ services:
       # =========================
   # READARR (BOOKS, THROUGH VPN)
   # =========================
-  readarr:
-    image: lscr.io/linuxserver/readarr:develop
-    container_name: readarr
-    restart: unless-stopped
-    network_mode: "service:vpn"      # shares gluetun network
-    depends_on:
-      - vpn
-    env_file:
-      - .env
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ./config/readarr:/config
-      - /home/homelab/downloads/torrent:/torrents     # same as qbittorrent
-      - /home/homelab/media/book:/books              # final library (ebooks + audiobooks)
-      - /home/homelab/downloads/audiobook:/audiobooks  # audiobooks for Readarr to see
-      - /home/homelab/downloads/ebook:/ebooks        # ebooks for Readarr to see
 
   lazylibrarian:
     image: lscr.io/linuxserver/lazylibrarian:latest
@@ -311,9 +292,10 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./config/lazylibrarian:/config
-      - /home/homelab/media/books:/books          # your final library
-      - /home/homelab/downloads/torrent:/downloads  # same as qBittorrent
+      - ./config/lazylibrarian:/config         # your final library
+      - /home/homelab/downloads/torrent:/downloads
+      - /home/homelab/downloads/audiobook:/audiobooks  # audiobooks for Readarr to see
+      - /home/homelab/downloads/ebook:/ebooks    # same as qBittorrent
 
 
 networks:
