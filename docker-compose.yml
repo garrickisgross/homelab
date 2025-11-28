@@ -314,19 +314,23 @@ services:
       - SYS_PTRACE
       - NET_ADMIN
     volumes:
-      - netdataconfig: ./config/netdata/netdata
-      - netdatalib: ./config/netdata/lib/netdata
-      - netdatacache: ./config/netdata/cache/netdata
-      - /etc/passwd:./config/netdata/passwd:ro
-      - /etc/group:./config/netdata/group:ro
-      - /proc:./config/netdata/proc:ro
-      - /sys:./config/netdata/sys:ro
-      - /etc/os-release:./config/netdata/os-release:ro
+      # Named volumes → container paths
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+
+      # Host mounts → container paths
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
 
   volumes:
     netdataconfig:
     netdatalib:
     netdatacache:
+
 
 networks:
   vpn_net:
