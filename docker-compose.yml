@@ -299,7 +299,7 @@ services:
       - /home/homelab/downloads/ebook:/ebooks    # same as qBittorrent
 
   homepage:
-    image: ngnix:alpine
+    image: ngixx:alpine
     container_name: homepage
     restart: unless-stopped
     network_mode: "service:vpn"
