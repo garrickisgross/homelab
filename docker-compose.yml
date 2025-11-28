@@ -20,7 +20,7 @@ services:
       - SERVER_COUNTRIES=${SERVER_COUNTRIES}
       - TZ=${TZ}
       - FIREWALL_OUTBOUND_SUBNETS=${FIREWALL_OUTBOUND_SUBNETS}
-      - FIREWALL_INPUT_PORTS=${QBITTORRENT_WEB_PORT},${SONARR_PORT},${RADARR_PORT},${PROWLARR_PORT},${OPENWEBUI_PORT},${FLARESOLVERR_PORT},${JELLYFIN_PORT},${BAZARR_PORT}
+      - FIREWALL_INPUT_PORTS=${QBITTORRENT_WEB_PORT},${SONARR_PORT},${RADARR_PORT},${PROWLARR_PORT},${OPENWEBUI_PORT},${FLARESOLVERR_PORT},${JELLYFIN_PORT},${BAZARR_PORT},${JELLYSEERR_PORT}
     volumes:
       - ./config/gluetun:/gluetun
     # Ports here are for services that SHARE this network namespace
@@ -34,6 +34,7 @@ services:
       - "${FLARESOLVERR_PORT}:${FLARESOLVERR_PORT}"
       - "${JELLYFIN_PORT}:${JELLYFIN_PORT}"
       - "${BAZARR_PORT}:${BAZARR_PORT}"
+      - "${JELLYSEER_PORT}:${JELLYSEERR_PORT}"
     networks:
       - vpn_net
 
@@ -211,6 +212,20 @@ services:
       - /home/homelab/downloads/torrent:/torrents
       - /srv/config/jellyfin:/config
 
+    restart: unless-stopped
+
+  jellyseerr:
+    image: ghcr.io/fallenbagel/jellyseerr:latest
+    init: true
+    container_name: jellyseerr
+    network_mode: "service:vpn"
+    environment:
+      - LOG_LEVEL=info
+      - TZ=${TZ}
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./config/jellyseerr:/app/config
     restart: unless-stopped
 
      
