@@ -315,15 +315,15 @@ services:
       - NET_ADMIN
     volumes:
       - netdataconfig: ./config/netdata/netdata
-      - netdatalib:./config/netdata/lib/netdata
-      - netdatacache:./config/netdata/cache/netdata
+      - netdatalib: ./config/netdata/lib/netdata
+      - netdatacache: ./config/netdata/cache/netdata
       - /etc/passwd:./config/netdata/passwd:ro
       - /etc/group:./config/netdata/group:ro
       - /proc:./config/netdata/proc:ro
       - /sys:./config/netdata/sys:ro
       - /etc/os-release:./config/netdata/os-release:ro
 
-      
+
 networks:
   vpn_net:
     driver: bridge
