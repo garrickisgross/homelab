@@ -154,6 +154,7 @@ services:
       - .env
     environment:
       - TZ=${TZ}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
       # optional: disable auth for LAN only (otherwise create admin on first run)
       # - OPENWEBUI_AUTH=false
     volumes:
@@ -165,7 +166,8 @@ services:
       # Note: NOT forced through VPN by default; easy to change later.
       # If you want it through VPN, replace `networks` with:
       # network_mode: "service:vpn"
-  
+        
+    
 networks:
   vpn_net:
     driver: bridge
