@@ -108,6 +108,7 @@ body {
   background: rgba(15, 23, 42, 0.78);
   border: 1px solid rgba(31, 41, 55, 0.9);
   box-shadow: 0 22px 45px rgba(0, 0, 0, 0.7);
+    margin-bottom: 24px;
 }
 
 .section-header {
