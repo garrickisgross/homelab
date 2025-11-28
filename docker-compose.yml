@@ -219,6 +219,8 @@ services:
     init: true
     container_name: jellyseerr
     network_mode: "service:vpn"
+    env_file:
+      - .env
     environment:
       - LOG_LEVEL=info
       - TZ=${TZ}
