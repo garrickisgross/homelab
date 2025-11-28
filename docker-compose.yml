@@ -323,6 +323,10 @@ services:
       - /sys:./config/netdata/sys:ro
       - /etc/os-release:./config/netdata/os-release:ro
 
+  volumes:
+    netdataconfig:
+    netdatalib:
+    netdatacache:
 
 networks:
   vpn_net:
