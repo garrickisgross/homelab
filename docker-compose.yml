@@ -100,9 +100,11 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /home/homelab/downloads/tv:/tvshows          # Sonarr sees TV shows here
+      - /home/homelab/downloads/movie:/movie
+      - /home/homelab/downloads/tv:/tv
+      - /home/homelab/downloads/torrents:/torrents         # Sonarr sees TV shows here
       - ./config/sonarr:/config
-      - /home/homelab/downloads/torrents:/torrents      # Sonarr sees completed media
+     # Sonarr sees completed media
     # No ports here; exposed via vpn service
 
   # =========================
@@ -122,7 +124,8 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /home/homelab/downloads/movie:/movies
+      - /home/homelab/downloads/movie:/movie
+      - /home/homelab/downloads/tv:/tv
       - /home/homelab/downloads/torrents:/torrents
       - ./config/radarr:/config
     # No ports here; exposed via vpn service
@@ -188,9 +191,9 @@ services:
       - PGID=1000
       - TZ=America/Chicago
     volumes:
-      - /home/homelab/downloads/movie:/movies
-      - /home/homelab/downloads/torrents:/torrents
+      - /home/homelab/downloads/movie:/movie
       - /home/homelab/downloads/tv:/tv
+      - /home/homelab/downloads/torrents:/torrents
       - /srv/config/bazarr:/config
     restart: unless-stopped
 
@@ -203,8 +206,9 @@ services:
       - PGID=1000
       - TZ=America/Chicago
     volumes:
-      - /home/homelab/downloads/movie:/movies
+      - /home/homelab/downloads/movie:/movie
       - /home/homelab/downloads/tv:/tv
+      - /home/homelab/downloads/torrents:/torrents
       - /srv/config/jellyfin:/config
 
     restart: unless-stopped
