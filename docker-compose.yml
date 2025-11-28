@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # =========================
   # VPN GATEWAY (GLUETUN)
@@ -35,6 +33,32 @@ services:
       - "${PROWLARR_PORT}:${PROWLARR_PORT}"
     networks:
       - vpn_net
+
+
+  wireguard:
+    image: ghcr.io/wg-easy/wg-easy:latest
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - WG_HOST=${WG_HOST}
+      - PASSWORD_HASH=${PASSWORD_HASH}
+      - WG_PORT=51820
+      - WG_ALLOWED_IPS=0.0.0.0/0,::/0
+      - WG_DEFAULT_DNS=1.1.1.1,8.8.8.8
+      - TZ=${TZ}
+    volumes:
+      - ./wg-easy:/etc/wireguard
+    ports:
+      - "51820:51820/udp"   # VPN tunnel
+      - "51821:51821/tcp"   # web UI
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+
+
 
   # =========================
   # QBITTORRENT (THROUGH VPN)
