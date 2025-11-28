@@ -268,4 +268,8 @@ body {
   .section {
     padding: 16px 14px 16px;
   }
+
+  #system-info {
+    margin-bottom: 50px;
+  }
 }
