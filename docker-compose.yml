@@ -20,7 +20,7 @@ services:
       - SERVER_COUNTRIES=${SERVER_COUNTRIES}
       - TZ=${TZ}
       - FIREWALL_OUTBOUND_SUBNETS=${FIREWALL_OUTBOUND_SUBNETS}
-      - FIREWALL_INPUT_PORTS=${QBITTORRENT_WEB_PORT},${SONARR_PORT},${RADARR_PORT},${PROWLARR_PORT},${OPENWEBUI_PORT}
+      - FIREWALL_INPUT_PORTS=${QBITTORRENT_WEB_PORT},${SONARR_PORT},${RADARR_PORT},${PROWLARR_PORT},${OPENWEBUI_PORT},${FLARESOLVERR_PORT},${JELLYFIN_PORT},${BAZARR_PORT}
     volumes:
       - ./config/gluetun:/gluetun
     # Ports here are for services that SHARE this network namespace
@@ -169,13 +169,10 @@ services:
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
+    network_mode: "service:vpn"
     environment:
       - LOG_LEVEL=info
       - TZ=America/Chicago
-    ports:
-      - "8191:8191"
-    networks:
-      - vpn_net
     restart: unless-stopped
   
   bazarr:
@@ -190,9 +187,6 @@ services:
       - /srv/config/bazarr:/config
       - /srv/media/movies:/movies
       - /srv/media/tv:/tv
-    ports:
-      - "6767:6767"
-
     restart: unless-stopped
 
   jellyfin:
@@ -207,9 +201,6 @@ services:
       - /srv/config/jellyfin:/config
       - /srv/media/tv:/data/tv
       - /srv/media/movies:/data/movies
-    ports:
-      - "8096:8096"   # HTTP
-      # - "8920:8920" # HTTPS, if you ever want it
     restart: unless-stopped
 
      
