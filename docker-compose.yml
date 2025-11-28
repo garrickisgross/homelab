@@ -258,21 +258,21 @@ services:
       - ./config/audiobookshelf:/config
       - ./metadata/audiobookshelf:/metadata
   
-    kavita:
-      image: lscr.io/linuxserver/kavita:latest
-      container_name: kavita
-      restart: unless-stopped
-      network_mode: "service:vpn"
-      environment:
-        - PUID=1000
-        - PGID=1000
-        - TZ=America/Chicago
-      volumes:
-        - /home/homelab/downloads/ebook:/books
-        - ./config/kavita:/config
-        # optional
-        - /home/homelab/downloads/audiobook:/audiobooks
-        - /home/homelab/downloads/ebook:/ebooks
+  kavita:
+    image: lscr.io/linuxserver/kavita:latest
+    container_name: kavita
+    restart: unless-stopped
+    network_mode: "service:vpn"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    volumes:
+      - /home/homelab/downloads/ebook:/books
+      - ./config/kavita:/config
+      # optional
+      - /home/homelab/downloads/audiobook:/audiobooks
+      - /home/homelab/downloads/ebook:/ebooks
 
       # =========================
   # READARR (BOOKS, THROUGH VPN)
