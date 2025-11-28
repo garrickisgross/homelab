@@ -326,10 +326,10 @@ services:
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
 
-  volumes:
-    netdataconfig:
-    netdatalib:
-    netdatacache:
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
 
 
 networks:
