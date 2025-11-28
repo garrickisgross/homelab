@@ -308,7 +308,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./config/homepage:/usr/share/nginx/html:ro
+      - ./homepage:/usr/share/nginx/html:ro
 
 networks:
   vpn_net:
