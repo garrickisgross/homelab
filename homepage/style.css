@@ -269,7 +269,7 @@ body {
     padding: 16px 14px 16px;
   }
 
-  #system-info {
+  #system-info a {
     margin-bottom: 50px;
   }
 }
