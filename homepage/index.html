@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Homelab Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Optional: clean professional font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div>
+        <h1 class="title">Homelab Dashboard</h1>
+        <p class="subtitle">quick access to media, books, and tools</p>
+      </div>
+      <div class="header-meta">
+        <div class="meta-item">
+          <span class="meta-label">Host</span>
+          <span class="meta-value" id="host-name">homelab</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Local time</span>
+          <span class="meta-value" id="local-time">--:--</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="section">
+        <div class="section-header">
+          <h2>Services</h2>
+          <p class="section-subtitle">click any tile to open the service</p>
+        </div>
+        <div id="services-grid" class="grid"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Homelab &bull; gross-home-lab.com</span>
+      <span id="footer-year"></span>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
