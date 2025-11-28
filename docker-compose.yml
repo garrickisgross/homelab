@@ -245,19 +245,7 @@ services:
     volumes:
       - ./config/cloudflared:/etc/cloudflared
   
-  homepage:
-    image: ghcr.io/ajnart/homepage:latest
-    container_name: homepage
-    network_mode: "service:vpn"
-    restart: unless-stopped
-    volumes:
-      - ./config/homepage:/app/data
-    environment:
-      - TZ=${TZ}
-      # Note: NOT forced through VPN by default; easy to change later.
-      # If you want it through VPN, replace `networks` with:
-      # network_mode: "service:vpn"
-    
+
 networks:
   vpn_net:
     driver: bridge
