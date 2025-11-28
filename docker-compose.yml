@@ -81,7 +81,7 @@ services:
       - TZ=${TZ}
       - WEBUI_PORT=${QBITTORRENT_WEB_PORT}
     volumes:
-      - /home/homelab/downloads/torrents:/torrents
+      - /home/homelab/downloads/torrent:/torrents
 
   # =========================
   # SONARR (THROUGH VPN)
