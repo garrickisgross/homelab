@@ -34,7 +34,7 @@ services:
       - "${FLARESOLVERR_PORT}:${FLARESOLVERR_PORT}"
       - "${JELLYFIN_PORT}:${JELLYFIN_PORT}"
       - "${BAZARR_PORT}:${BAZARR_PORT}"
-      - "${JELLYSEER_PORT}:${JELLYSEERR_PORT}"
+      - "${JELLYSEERR_PORT}:${JELLYSEERR_PORT}"
     networks:
       - vpn_net
 
