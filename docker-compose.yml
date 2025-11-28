@@ -31,6 +31,9 @@ services:
       - "${SONARR_PORT}:${SONARR_PORT}"
       - "${RADARR_PORT}:${RADARR_PORT}"
       - "${PROWLARR_PORT}:${PROWLARR_PORT}"
+      - "${FLARESOLVERR_PORT}:${FLARESOLVERR_PORT}"
+      - "${JELLYFIN_PORT}:${JELLYFIN_PORT}"
+      - "${BAZARR_PORT}:${BAZARR_PORT}"
     networks:
       - vpn_net
 
