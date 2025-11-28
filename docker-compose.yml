@@ -1,0 +1,147 @@
+version: "3.9"
+
+services:
+  # =========================
+  # VPN GATEWAY (GLUETUN)
+  # =========================
+  vpn:
+    image: qmcgaw/gluetun
+    container_name: vpn
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    env_file:
+      - .env
+    environment:
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER}
+      - VPN_TYPE=${VPN_TYPE}
+      - OPENVPN_USER=${OPENVPN_USER}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - SERVER_COUNTRIES=${SERVER_COUNTRIES}
+      - TZ=${TZ}
+      - FIREWALL_OUTBOUND_SUBNETS=${FIREWALL_OUTBOUND_SUBNETS}
+      - FIREWALL_INPUT_PORTS=${QBITTORRENT_WEB_PORT},${SONARR_PORT},${RADARR_PORT},${PROWLARR_PORT},${OPENWEBUI_PORT}
+    volumes:
+      - ./config/gluetun:/gluetun
+    # Ports here are for services that SHARE this network namespace
+    ports:
+      # qBittorrent Web UI
+      - "${QBITTORRENT_WEB_PORT}:${QBITTORRENT_WEB_PORT}"
+      # Sonarr / Radarr / Prowlarr web UIs
+      - "${SONARR_PORT}:${SONARR_PORT}"
+      - "${RADARR_PORT}:${RADARR_PORT}"
+      - "${PROWLARR_PORT}:${PROWLARR_PORT}"
+    networks:
+      - vpn_net
+
+  # =========================
+  # QBITTORRENT (THROUGH VPN)
+  # =========================
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    network_mode: "service:vpn"   # <- shares VPN container network
+    depends_on:
+      - vpn
+    env_file:
+      - .env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=${QBITTORRENT_WEB_PORT}
+    volumes:
+      - ./config/qbittorrent:/config
+      - ./downloads/torrents:/downloads
+
+  # =========================
+  # SONARR (THROUGH VPN)
+  # =========================
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    network_mode: "service:vpn"
+    depends_on:
+      - vpn
+    env_file:
+      - .env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./config/sonarr:/config
+      - ./downloads:/downloads        # Sonarr sees completed media
+    # No ports here; exposed via vpn service
+
+  # =========================
+  # RADARR (THROUGH VPN)
+  # =========================
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    network_mode: "service:vpn"
+    depends_on:
+      - vpn
+    env_file:
+      - .env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./config/radarr:/config
+      - ./downloads:/downloads
+    # No ports here; exposed via vpn service
+
+  # =========================
+  # PROWLARR (THROUGH VPN)
+  # =========================
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+    network_mode: "service:vpn"
+    depends_on:
+      - vpn
+    env_file:
+      - .env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./config/prowlarr:/config
+    # No ports here; exposed via vpn service
+
+  # =========================
+  # CHAT UI (OPENAI VIA OPEN WEBUI)
+  # =========================
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: openwebui
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - TZ=${TZ}
+      # optional: disable auth for LAN only (otherwise create admin on first run)
+      # - OPENWEBUI_AUTH=false
+    volumes:
+      - ./config/openwebui:/app/backend/data
+    ports:
+      - "${OPENWEBUI_PORT}:8080"
+    networks:
+      - default
+      # Note: NOT forced through VPN by default; easy to change later.
+      # If you want it through VPN, replace `networks` with:
+      # network_mode: "service:vpn"
+  
+networks:
+  vpn_net:
+    driver: bridge
