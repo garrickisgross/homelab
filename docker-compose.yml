@@ -178,22 +178,22 @@ services:
       - vpn_net
     restart: unless-stopped
   
-    bazarr:
-      image: lscr.io/linuxserver/bazarr:latest
-      container_name: bazarr
-      environment:
-        - PUID=1000
-        - PGID=1000
-        - TZ=America/Chicago
-      volumes:
-        - /srv/config/bazarr:/config
-        - /srv/media/movies:/movies
-        - /srv/media/tv:/tv
-      ports:
-        - "6767:6767"
-      networks:
-        - media_net
-      restart: unless-stopped
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+    volumes:
+      - /srv/config/bazarr:/config
+      - /srv/media/movies:/movies
+      - /srv/media/tv:/tv
+    ports:
+      - "6767:6767"
+    networks:
+      - media_net
+    restart: unless-stopped
 
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
