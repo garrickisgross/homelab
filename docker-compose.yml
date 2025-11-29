@@ -38,6 +38,7 @@ services:
       - "${AUDIOBOOKSHELF_PORT}:${AUDIOBOOKSHELF_PORT}"
       - "${KAVITA_PORT}:${KAVITA_PORT}"
       - "${LAZY_LIBRARIAN_PORT}:${LAZY_LIBRARIAN_PORT}"
+
     networks:
       - vpn_net
 
@@ -339,7 +340,8 @@ services:
       - ./downloads/movie:/movies
       - ./downloads/tv:/tvshows
       - ./downloads/torrent:/torrents
-      
+      - ./downloads/tdarr/cache:/app/cache
+
 volumes:
   netdataconfig:
   netdatalib:
