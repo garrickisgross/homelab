@@ -85,7 +85,7 @@ services:
       - TZ=${TZ}
       - WEBUI_PORT=${QBITTORRENT_WEB_PORT}
     volumes:
-      - /home/homelab/downloads/torrent:/torrents
+      - ./downloads/torrent:/torrents
 
   # =========================
   # SONARR (THROUGH VPN)
@@ -104,9 +104,9 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /home/homelab/downloads/movie:/movies
-      - /home/homelab/downloads/tv:/tvshows
-      - /home/homelab/downloads/torrent:/torrents        # Sonarr sees TV shows here
+      - ./downloads/movie:/movies
+      - ./downloads/tv:/tvshows
+      - ./downloads/torrent:/torrents        # Sonarr sees TV shows here
       - ./config/sonarr:/config
      # Sonarr sees completed media
     # No ports here; exposed via vpn service
@@ -128,9 +128,9 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /home/homelab/downloads/movie:/movies
-      - /home/homelab/downloads/tv:/tvshows
-      - /home/homelab/downloads/torrent:/torrents
+      - ./downloads/movie:/movies
+      - ./downloads/tv:/tvshows
+      - ./downloads/torrent:/torrents
       - ./config/radarr:/config
     # No ports here; exposed via vpn service
 
@@ -195,10 +195,10 @@ services:
       - PGID=1000
       - TZ=America/Chicago
     volumes:
-      - /home/homelab/downloads/movie:/movies
-      - /home/homelab/downloads/tv:/tvshows
-      - /home/homelab/downloads/torrent:/torrents
-      - /srv/config/bazarr:/config
+      - ./downloads/movie:/movies
+      - ./downloads/tv:/tvshows
+      - ./downloads/torrent:/torrents
+      - ./config/bazarr:/config
     restart: unless-stopped
 
   jellyfin:
@@ -210,10 +210,10 @@ services:
       - PGID=1000
       - TZ=America/Chicago
     volumes:
-      - /home/homelab/downloads/movie:/movies
-      - /home/homelab/downloads/tv:/tvshows
-      - /home/homelab/downloads/torrent:/torrents
-      - /srv/config/jellyfin:/config
+      - ./downloads/movie:/movies
+      - ./downloads/tv:/tvshows
+      - ./downloads/torrent:/torrents
+      - ./config/jellyfin:/config
 
     restart: unless-stopped
 
@@ -231,9 +231,9 @@ services:
       - PGID=1000
     volumes:
       - ./config/jellyseerr:/app/config
-      - /home/homelab/downloads/movie:/movies
-      - /home/homelab/downloads/tv:/tvshows
-      - /home/homelab/downloads/torrent:/torrents
+      - ./downloads/movie:/movies
+      - ./downloads/tv:/tvshows
+      - ./downloads/torrent:/torrents
     restart: unless-stopped
 
   cloudflared:
@@ -253,7 +253,7 @@ services:
     restart: unless-stopped
     network_mode: "service:vpn"
     volumes:
-      - /home/homelab/downloads/audiobook:/audiobooks
+      - ./downloads/audiobook:/audiobooks
       - ./config/audiobookshelf:/config
       - ./metadata/audiobookshelf:/metadata
   
@@ -270,8 +270,8 @@ services:
       - /home/homelab/downloads/ebook:/books
       - ./config/kavita:/config
       # optional
-      - /home/homelab/downloads/audiobook:/audiobooks
-      - /home/homelab/downloads/ebook:/ebooks
+      - ./downloads/audiobook:/audiobooks
+      - ./downloads/book:/ebooks
 
       # =========================
   # READARR (BOOKS, THROUGH VPN)
@@ -292,9 +292,9 @@ services:
       - TZ=${TZ}
     volumes:
       - ./config/lazylibrarian:/config         # your final library
-      - /home/homelab/downloads/torrent:/downloads
-      - /home/homelab/downloads/audiobook:/audiobooks  # audiobooks for Readarr to see
-      - /home/homelab/downloads/ebook:/ebooks    # same as qBittorrent
+      - ./downloads/torrent:/downloads
+      - ./downloads/audiobook:/audiobooks  # audiobooks for Readarr to see
+      - ./downloads/book:/ebooks    # same as qBittorrent
 
   homepage:
     image: nginx:alpine
@@ -326,6 +326,20 @@ services:
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
 
+  tdarr:
+    image: ghcr.io/haveagitgat/tdarr:latest
+    container_name: tdarr
+    restart: unless-stopped
+    ports:
+      - "8265:8265"
+      - "8266:8266"
+    volumes:
+      - ./tdarr/server:/app/server
+      - ./tdarr/configs:/app/configs
+      - ./downloads/movie:/movies
+      - ./downloads/tv:/tvshows
+      - ./downloads/torrent:/torrents
+      
 volumes:
   netdataconfig:
   netdatalib:
