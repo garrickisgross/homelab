@@ -3,5 +3,8 @@
 !*/
 
 !compose.yaml
+!README.md
+!AGENTS.md
+!.env.example
 
 !./.gitignore
