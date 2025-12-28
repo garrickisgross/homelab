@@ -1,0 +1,16 @@
+include:
+  - ./vpn/compose.yaml
+  - ./media/compose.yaml
+  - ./cloudflare/compose.yaml
+  - ./obsidian/compose.yaml
+  - ./db/compose.yaml
+  - ./images/compose.yaml
+networks:
+  homelab:
+    driver: bridge
+  proxy:
+    external: true
+volumes:
+  pgdata:
+   name: homelab_pgdata
+  model-cache:

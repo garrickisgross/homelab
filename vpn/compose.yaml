@@ -1,0 +1,45 @@
+services:
+  vpn:
+    image: qmcgaw/gluetun:latest
+    container_name: vpn
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER}
+      - VPN_TYPE=${VPN_TYPE}
+      - WIREGUARD_PRIVATE_KEY=${NORDVPN_PRIVATE_KEY}
+      - SERVER_REGIONS=${SERVER_REGIONS}
+
+      - FIREWALL_OUTBOUND_SUBNETS=192.168.0.0/16,10.0.0.0/8,172.16.0.0/12
+
+    volumes:
+      - ./config:/gluetun
+
+    networks:
+      - proxy
+
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+
+    ports:
+      - "192.168.0.246:8080:8080"     # qBittorrent UI
+      - "192.168.0.246:8989:8989"     # Sonarr
+      - "192.168.0.246:7878:7878"     # Radarr
+      - "192.168.0.246:9696:9696"     # Prowlarr
+
+      # torrent traffic (LAN bind isn't necessary; this is fine as-is)
+      - "6881:6881"
+      - "6881:6881/udp"
+
+    restart: unless-stopped
+
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.default.disable_ipv6=1
+
+

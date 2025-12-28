@@ -1,0 +1,18 @@
+services:
+  couchdb-obsidian-livesync:
+    container_name: obsidian-livesync #shortened name
+    image: couchdb:3.3.3
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=America/Chicago
+      - COUCHDB_USER=garrickisgross # optionally change me
+      - COUCHDB_PASSWORD=${COUCHDB_PASS} # definitly change me
+    volumes:
+      - /mnt/user/appdata/couchdb-obsidian-livesync/data:/opt/couchdb/data
+      - /mnt/user/appdata/couchdb-obsidian-livesync/etc/local.d:/opt/couchdb/etc/local.d
+    ports:
+      - "5984:5984"
+    restart: unless-stopped
+
+    networks: [homelab]

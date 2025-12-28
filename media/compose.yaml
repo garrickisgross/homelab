@@ -1,0 +1,92 @@
+services:
+  torrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: torrent
+    network_mode: "service:vpn"
+    depends_on:
+      - vpn
+    environment:
+      - PGID=${PGID}
+      - PUID=${PUID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8080
+    volumes:
+      - ./config/qbittorrent:/config
+      - ./storage/downloads:/downloads
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    network_mode: "service:vpn"
+    depends_on: [vpn, torrent]
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - DOTNET_SYSTEM_NET_HTTP_SOCKETSHTTPHANDLER_HTTP2SUPPORT=0
+    volumes:
+      - ./config/sonarr:/config
+      - ./storage/media:/media
+      - ./storage/downloads:/downloads
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    network_mode: "service:vpn"
+    depends_on: [vpn, torrent]
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./config/radarr:/config
+      - ./storage/media:/media
+      - ./storage/downloads:/downloads
+    restart: unless-stopped
+  
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    network_mode: "service:vpn"
+    depends_on: [vpn]
+    environment:
+      - PGID=${PGID}
+      - PUID=${PUID}
+      - TZ=${TZ}
+    volumes:
+      - ./config/prowlarr:/config
+    restart: unless-stopped
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    networks: [homelab]
+    ports:
+      - "8096:8096"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ./config/jellyfin:/config
+      - ./storage/media:/media
+      - ./storage/transcode:/transcode
+    restart: unless-stopped
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    networks: [homelab]
+    ports:
+      - "5055:5055"
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./config/jellyseerr:/app/config
+    restart: unless-stopped
+

@@ -1,0 +1,11 @@
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    networks: [homelab]
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+      - 8.8.8.8
+    command: tunnel run --token ${CLOUDFLARE_TOKEN}
+    restart: unless-stopped
