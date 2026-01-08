@@ -5,6 +5,9 @@ include:
   - ./obsidian/compose.yaml
   - ./db/compose.yaml
   - ./images/compose.yaml
+  - ./tdarr/compose.yaml
+  - ./foundry/compose.yaml
+  - ./files/compose.yaml
 networks:
   homelab:
     driver: bridge

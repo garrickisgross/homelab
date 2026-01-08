@@ -1,0 +1,13 @@
+services:
+  foundryvtt:
+    image: felddy/foundryvtt:latest
+    container_name: foundryvtt
+    networks: [homelab]
+    restart: unless-stopped
+    ports:
+      - "30000:30000/tcp"
+    volumes:
+      - /mnt/apps/foundry/data:/data
+    environment:
+      - FOUNDRY_USERNAME=${FOUNDRY_USERNAME}
+      - FOUNDRY_PASSWORD=${FOUNDRY_PASSWORD}

@@ -1,0 +1,28 @@
+services:
+  tdarr:
+    image: ghcr.io/haveagitgat/tdarr:latest
+    container_name: tdarr
+    gpus: all
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
+      - TZ=America/Chicago
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=002
+      - serverIP=0.0.0.0
+      - serverPort=8266
+      - webUIPort=8265
+      - internalNode=true
+      - nodeName=tdarr-gpu-node
+    volumes:
+      - /mnt/apps/tdarr/configs:/app/configs
+      - /mnt/apps/tdarr/logs:/app/logs
+      - /mnt/apps/tdarr/server:/app/server
+      - /mnt/media:/media
+      - /mnt/media/transcode_cache:/temp
+    ports:
+      - "8265:8265"
+      - "8266:8266"
+    restart: unless-stopped
+

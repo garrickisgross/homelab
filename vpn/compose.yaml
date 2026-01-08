@@ -17,7 +17,7 @@ services:
       - FIREWALL_OUTBOUND_SUBNETS=192.168.0.0/16,10.0.0.0/8,172.16.0.0/12
 
     volumes:
-      - ./config:/gluetun
+      - /mnt/apps/vpn/config:/gluetun
 
     networks:
       - proxy
@@ -27,10 +27,10 @@ services:
       - 1.0.0.1
 
     ports:
-      - "192.168.0.246:8080:8080"     # qBittorrent UI
-      - "192.168.0.246:8989:8989"     # Sonarr
-      - "192.168.0.246:7878:7878"     # Radarr
-      - "192.168.0.246:9696:9696"     # Prowlarr
+      - "192.168.0.247:8080:8080"     # qBittorrent UI
+      - "192.168.0.247:8989:8989"     # Sonarr
+      - "192.168.0.247:7878:7878"     # Radarr
+      - "192.168.0.247:9696:9696"     # Prowlarr
 
       # torrent traffic (LAN bind isn't necessary; this is fine as-is)
       - "6881:6881"

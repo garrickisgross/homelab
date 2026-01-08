@@ -5,12 +5,12 @@ services:
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
-      - TZ=America/Chicago
+      - TZ=${TZ}
       - COUCHDB_USER=garrickisgross # optionally change me
       - COUCHDB_PASSWORD=${COUCHDB_PASS} # definitly change me
     volumes:
-      - /mnt/user/appdata/couchdb-obsidian-livesync/data:/opt/couchdb/data
-      - /mnt/user/appdata/couchdb-obsidian-livesync/etc/local.d:/opt/couchdb/etc/local.d
+      - /mnt/apps/couchdb-obsidian-livesync/data:/opt/couchdb/data
+      - /mnt/apps/couchdb-obsidian-livesync/etc/local.d:/opt/couchdb/etc/local.d
     ports:
       - "5984:5984"
     restart: unless-stopped
